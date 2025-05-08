@@ -9,7 +9,7 @@ namespace Application.Repositories
 {
     public interface IRepository<T> where T : BaseEntityModel
     {
-        Task<T> GetByIdAsync(int id); //Read
+        Task<T> GetByIdAsync(int ID); //Read
         Task<IEnumerable<T>> GetAllAsync();
         Task AddAsync(T entity); //Create
         void Update(T entity); //Update

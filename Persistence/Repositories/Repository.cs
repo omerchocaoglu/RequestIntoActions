@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Repositories;
 using Domain.EntitiyModels.BaseEntitityModels;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories
@@ -12,10 +13,12 @@ namespace Persistence.Repositories
     public class Repository<T> : IRepository<T> where T : BaseEntityModel
     {
         protected readonly DbContext _context;
+        private readonly int userID;
         protected readonly DbSet<T> _dbSet;
-        public Repository(DbContext context)
+        public Repository(DbContext context, int _userID)
         {
             _context = context;
+            userID = _userID;
             _dbSet = _context.Set<T>();
         }
         public async Task AddAsync(T entity)
@@ -24,22 +27,54 @@ namespace Persistence.Repositories
         }
         public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            try
+            {
+                return await _dbSet.ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(int ID)
         {
-            return await _dbSet.FindAsync(id);
+            try
+            {
+                return await _dbSet.FindAsync(ID);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
-        public void Update(T entity)// t nin anlamı type yani ben sana string verebilirim yani verilen değere göre şekillenir hiçbir şey dönmezse dönmez.
+        public void Update(T entity) // t nin anlamı type yani ben sana string verebilirim yani verilen değere göre şekillenir hiçbir şey dönmezse dönmez.
         {
-            entity.LastModifiedOn = DateTime.Now;
-            _dbSet.Update(entity);
+            try
+            {
+                entity.LastModifiedOn = DateTime.Now;
+                entity.LastModifiedBy = userID;
+                _dbSet.Update(entity);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
         public void Delete(T entity)
         {
-            _dbSet.Remove(entity);
+            try
+            {
+                entity.ObjectStatus = ObjectStatus.Deleted;
+                entity.Status = Status.Passive;
+                _dbSet.Remove(entity);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

@@ -10,8 +10,8 @@ namespace Domain.Enums
     public enum ObjectStatus
     {
         [Display(Name = "Silinmiş")]
-        Delete = 1,
+        Deleted = 1,
         [Display(Name = "Silinmemiş")]
-        NonDelete = 0
+        NonDeleted = 0
     }
 }

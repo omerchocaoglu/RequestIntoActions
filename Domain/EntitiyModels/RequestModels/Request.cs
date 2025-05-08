@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace Domain.EntitiyModels.RequestModels
         [DisplayName("Mesaj")]
         public string Message {  get; set; }
         [DisplayName("Kullanıcı")]
-        public int UserID { get; set; }
+        public int? UserID { get; set; }
+        [ForeignKey("UserID")]
         public User User { get; set; } // burada isteği hangi user'ın yaptığını görebileceğiz
         [DisplayName("Açıklama")]
         public string? Description { get; set; }

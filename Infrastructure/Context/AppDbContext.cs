@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.EntitiyModels.ActionModels;
 using Domain.EntitiyModels.RequestModels;
 using Domain.EntitiyModels.UserModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Context
 {
@@ -16,7 +18,7 @@ namespace Infrastructure.Context
         }
         public DbSet<Request> Requests { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Action> Actions { get; set; }
+        public DbSet<RequestAction> Actions { get; set; }
 
         public override int SaveChanges()
         {

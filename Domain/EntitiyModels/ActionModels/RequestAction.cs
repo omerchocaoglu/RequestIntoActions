@@ -11,12 +11,13 @@ using Domain.Enums;
 
 namespace Domain.EntitiyModels.ActionModels
 {
-    public class Action:BaseEntityModel
+    public class RequestAction:BaseEntityModel
     {
         public string Message { get; set; }
-        public Request Request { get; set; }
-        public int RequestID { get; set; }
-        public User? UserID { get; set; }
+        public Request Request { get; set; } // Navigation
+        public int RequestID { get; set; } // Foreign key
+        public int? UserID { get; set; } // Foreign key
+        public User? User { get; set; } // Navigation
         public string? Description { get; set; }
         public DateTime StartedDate { get; set; }
         public DateTime FinishedDate { get; set; }

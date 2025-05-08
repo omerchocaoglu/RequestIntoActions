@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 using Application.Repositories;
 using Domain.EntitiyModels.BaseEntitityModels;
 using Domain.Enums;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories
 {
     public class Repository<T> : IRepository<T> where T : BaseEntityModel
     {
-        protected readonly DbContext _context;
-        private readonly int userID;
+        protected readonly AppDbContext _context;
         protected readonly DbSet<T> _dbSet;
-        public Repository(DbContext context, int _userID)
+        public Repository(AppDbContext context)
         {
             _context = context;
-            userID = _userID;
             _dbSet = _context.Set<T>();
         }
         public async Task AddAsync(T entity)
@@ -55,7 +54,6 @@ namespace Persistence.Repositories
             try
             {
                 entity.LastModifiedOn = DateTime.Now;
-                entity.LastModifiedBy = userID;
                 _dbSet.Update(entity);
             }
             catch (Exception)

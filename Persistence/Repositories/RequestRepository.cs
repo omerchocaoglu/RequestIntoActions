@@ -5,14 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Repositories;
 using Domain.EntitiyModels.RequestModels;
+using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories
 {
     public class RequestRepository: Repository<Request>, IRequestRepository
     {
-        public RequestRepository(DbContext context) : base(context) 
+        private readonly AppDbContext _context;
+        public RequestRepository(AppDbContext context) : base(context) 
         { 
+            _context = context;
         }
         // Sadece bu repository'e özel metotlar burada tanımlanabilir:
     }

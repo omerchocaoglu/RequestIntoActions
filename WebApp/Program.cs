@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 //AppContextDb- Veritabaný baðlantýsý
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 //Repository ve UnitOfWork
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

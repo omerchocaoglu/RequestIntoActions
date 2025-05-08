@@ -20,8 +20,8 @@ namespace Domain.EntitiyModels.RequestModels
         [DisplayName("Mesaj")]
         public string Message {  get; set; }
         [DisplayName("Kullanıcı")]
-        public int? UserID { get; set; }
         [ForeignKey("UserID")]
+        public int? UserID { get; set; }
         public User User { get; set; } // burada isteği hangi user'ın yaptığını görebileceğiz
         [DisplayName("Açıklama")]
         public string? Description { get; set; }

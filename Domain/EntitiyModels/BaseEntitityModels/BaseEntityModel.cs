@@ -12,8 +12,8 @@ namespace Domain.EntitiyModels.BaseEntitityModels
 {
     public class BaseEntityModel
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key] //Bu özellik (property) birincil anahtardır. Entity Framework bu özelliği veritabanında tabloyu tanımlarken PRIMARY KEY olarak işaretler.
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Bu özellik, veritabanının bu alanı otomatik olarak artırarak oluşturmasını söyler. Yani, ID alanı için elle değer vermezsin — veritabanı her yeni kayıt eklediğinde 1, 2, 3, ... gibi değerleri otomatik atar.
         public int ID { get; set; }
         [DisplayName("Bu Kayıt tarihi")]
         public DateTime CreateOn { get; set; }

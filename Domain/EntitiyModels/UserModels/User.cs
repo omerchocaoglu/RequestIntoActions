@@ -16,6 +16,7 @@ namespace Domain.EntitiyModels.UserModels
         [NotMapped]
         public string FullName => $"{Name} {SurName}";
         public string Email { get; set; }
+        public string Password { get; set; }
         public ICollection<Request> Requests { get; set; } // İstekleri bağladık
     }
 }

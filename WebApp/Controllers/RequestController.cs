@@ -71,7 +71,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Request request)
         {
-            var userIdStr = HttpContext.Session.GetString("UserId");
+            var userIdStr = HttpContext.Session.GetString("UserID");
             if (string.IsNullOrEmpty(userIdStr))
             {
                 return RedirectToAction("Login", "Account");

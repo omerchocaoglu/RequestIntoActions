@@ -42,9 +42,11 @@ namespace WebApp.Controllers
             ViewBag.Error = "Geçersiz kullanacı adı veya şifre";
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken] // ekstra güvenlik katmanı için gereklidir
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear(); // tüm sessionları temizle
+            HttpContext.Session.Clear(); // tüm sessionları temizle oturumu sıfırla
             return RedirectToAction("Login", "Account");
         }
     }

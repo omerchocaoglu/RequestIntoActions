@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Domain.EntitiyModels.RequestModels.Request> // burada çağırmak istediğin dosyayı bulmak gerekli namespace e bak!
+﻿@* @model IEnumerable<WebApp.Models.RequestListViewModel>  *@  
+@* yukarıdakini kapattık çünkü Request i alttaki model'e atadık *@
+@model WebApp.Models.RequestListViewModel // burada çağırmak istediğin dosyayı bulmak gerekli namespace e bak!
 
 @{
     ViewData["Title"] = "Taleplerim";
@@ -17,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Requests)
         {
             <tr>
                 <td>@item.Title</td>
@@ -30,4 +32,15 @@
         }
     </tbody>
 </table>
+
+<nav>
+    <ul class="pagination">
+    @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i"> @i </a>
+            </li>
+        }
+</ul>
+</nav>
 

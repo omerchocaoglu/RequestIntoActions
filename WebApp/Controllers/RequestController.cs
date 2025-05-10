@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.EntitiyModels.RequestModels;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
@@ -13,7 +14,7 @@ namespace WebApp.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index( int page = 1, int pageSize = 5 )
         {
             var userIdStr = HttpContext.Session.GetString("UserID");
             if (string.IsNullOrEmpty(userIdStr))
@@ -22,8 +23,17 @@ namespace WebApp.Controllers
             }
             int userID = int.Parse(userIdStr);
             var requests = await _unitOfWork.Requests.GetAllAsync(r => r.UserID == userID);
+            var totalCount = requests.Count();
+            // pagination işlemleri için
+            var pagedRequests = requests.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            var viewModel = new RequestListViewModel
+            {
+                Requests = pagedRequests,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
 
-            return View(requests);
+            return View(viewModel);
         }
         // Create
         [HttpGet]

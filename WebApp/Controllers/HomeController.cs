@@ -17,7 +17,8 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+            var userIdStr = HttpContext.Session.GetString("UserID");
+            if (string.IsNullOrEmpty(userIdStr))
             {
                 return RedirectToAction("Login", "Account");
             }

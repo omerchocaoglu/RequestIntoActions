@@ -17,6 +17,7 @@ namespace Domain.EntitiyModels.UserModels
         public string FullName => $"{Name} {SurName}";
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Username { get; set; }
         public ICollection<Request> Requests { get; set; } // İstekleri bağladık
     }
 }

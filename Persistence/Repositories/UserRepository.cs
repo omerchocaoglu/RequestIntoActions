@@ -19,19 +19,32 @@ namespace Persistence.Repositories
             _context = context;
         }
 
-        public async Task<UserDto?> GetUserAsync(string email, string password)
+        public async Task<UserDto?> GetUserAsync(string username, string password)
         {
-            var user = await _context.Users
-                .Where(x => x.Email == email && x.Password == password) // Gerçek projede Password hash olmalı!
-                .Select(x => new UserDto
-                {
-                    ID = x.ID,
-                    Email = x.Email,
-                    FullName = $"{x.Name} {x.SurName}"
-                })
-                .FirstOrDefaultAsync();
+            //var user = await _context.Users
+            //    .Where(x => x.Email == email && x.Password == password) // Gerçek projede Password hash olmalı!
+            //    .Select(x => new UserDto
+            //    {
+            //        ID = x.ID,
+            //        Email = x.Email,
+            //        FullName = $"{x.Name} {x.SurName}"
+            //    })
+            //    .FirstOrDefaultAsync();
 
-            return user;
+            //return user;
+            var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower() && u.Password == password);
+
+            if (user == null)
+                return null;
+
+            return new UserDto
+            {
+                ID = user.ID,
+                Email = user.Email,
+                FullName = user.Name + " " + user.SurName,
+                // diğer gerekli alanlar
+            };
         }
     }
 

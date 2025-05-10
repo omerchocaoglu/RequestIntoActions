@@ -17,6 +17,12 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Yetkili kullanýcýysa devam et
             return View();
         }
 

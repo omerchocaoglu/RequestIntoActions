@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Domain.EntitiyModels.RequestModels.Request> // burada çağırmak istediğin dosyayı bulmak gerekli namespace e bak!
+
+@{
+    ViewData["Title"] = "Taleplerim";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a class="btn btn-primary mb-3" href="/Request/Create">+ Yeni Talep</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="/Request/Edit/@item.ID">Düzenle</a>
+                    <a class="btn btn-sm btn-danger" href="/Request/Delete/@item.ID">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

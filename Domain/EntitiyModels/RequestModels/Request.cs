@@ -18,7 +18,7 @@ namespace Domain.EntitiyModels.RequestModels
         [DisplayName("İsteğe bağlı başlık")]
         public string Title { get; set; }
         [DisplayName("Mesaj")]
-        public string Message {  get; set; }
+        public string? Message {  get; set; }
         [DisplayName("Kullanıcı")]
         [ForeignKey("UserID")]
         public int? UserID { get; set; }

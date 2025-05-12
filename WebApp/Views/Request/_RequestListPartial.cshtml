@@ -5,6 +5,7 @@
         <tr>
             <th>Başlık</th>
             <th>Açıklama</th>
+            <th>Mesaj</th>
             <th>Oluşturulma Tarihi</th>
         </tr>
     </thead>
@@ -16,7 +17,7 @@
                 <td>@item.Description</td>
                 <td>@item.StartedDate.ToString("dd.MM.yyyy")</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" href="/Request/Edit/@item.ID">Düzenle</a>
+                    <a class="btn btn-sm btn-success" href="/Request/Edit/@item.ID">Düzenle</a>
                     <button class="btn btn-sm btn-danger delete-request" data-id="@item.ID">Sil</button>
                 </td>
             </tr>

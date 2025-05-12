@@ -16,7 +16,7 @@ namespace Domain.DTOModels
     public class RequestCreateDTO
     {
         [Required]
-        public string Title { get; set; }
+        public string Title { get; set; }   
         [Required]
         public string Description { get; set; }
     }

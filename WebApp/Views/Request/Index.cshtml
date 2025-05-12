@@ -15,6 +15,21 @@
 <div id="requestList">
     @await Html.PartialAsync("_RequestListPartial", Model)
 </div>
+@* Düzenleme modalı *@
+<div class="modal fade" id="editRequestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Talep Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="editRequestModalBody">
+                <!-- Partial buraya yüklenecek -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- Yeni Talep Modalı -->
 <div class="modal fade" id="createRequestModal" tabindex="-1" aria-labelledby="createRequestModalLabel" aria-hidden="true">
@@ -64,8 +79,9 @@
                         // Listeyi Ajax ile yenile
                         $('#requestList').load('/Request/List');
                     },
-                    error: function () {
-                        alert('Talep oluşturulurken bir hata oluştu.');
+                    error: function (xhr) {
+                        console.error(xhr);
+                        alert('Talep oluşturulurken bir hata oluştu: ' + xhr.status);
                     }
                 });
             });
@@ -96,14 +112,34 @@
                 }
             });
         });
+                // Düzenle butonuna tıklanınca modala form yükle
+        $('#requestList').on('click', '.edit-request', function () {
+            const id = $(this).data('id');
+            $.get('/Request/Edit/' + id, function (data) {
+                $('#editRequestModalBody').html(data);
+                $('#editRequestModal').modal('show');
+            });
+        });
 
+        // Form gönderimi
+        $(document).on('submit', '#editRequestForm', function (e) {
+            e.preventDefault();
+            const formData = $(this).serialize();
+
+            $.ajax({
+                url: '/Request/Edit',
+                type: 'POST',
+                data: formData,
+                success: function () {
+                    $('#editRequestModal').modal('hide');
+                    $('#requestList').load('/Request/List');
+                },
+                error: function () {
+                    alert('Düzenleme sırasında bir hata oluştu.');
+                }
+            });
+        });
     </script>
-}
-
-
-
-
-
 }
 
 

@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Domain.EntitiyModels.RequestModels.Request>  
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Başlık</th>
+            <th>Açıklama</th>
+            <th>Oluşturulma Tarihi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Description</td>
+                <td>@item.StartedDate.ToString("dd.MM.yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

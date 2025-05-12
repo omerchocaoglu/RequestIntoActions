@@ -1,6 +1,6 @@
 ﻿@* @model IEnumerable<WebApp.Models.RequestListViewModel>  *@  
 @* yukarıdakini kapattık çünkü Request i alttaki model'e atadık *@
-@model WebApp.Models.RequestListViewModel // burada çağırmak istediğin dosyayı bulmak gerekli namespace e bak!
+@model WebApp.Models.RequestListViewModel
 
 @{
     ViewData["Title"] = "Taleplerim";
@@ -8,39 +8,80 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<a class="btn btn-primary mb-3" href="/Request/Create">+ Yeni Talep</a>
+<!-- Yeni Talep Butonu (Modal tetikleyici) -->
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createRequestModal">+ Yeni Talep</button>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Başlık</th>
-            <th>Açıklama</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Requests)
-        {
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.Description</td>
-                <td>
-                    <a class="btn btn-sm btn-warning" href="/Request/Edit/@item.ID">Düzenle</a>
-                    <a class="btn btn-sm btn-danger" href="/Request/Delete/@item.ID">Sil</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<!-- Talep Listesi (Ajax ile yenilenecek alan) -->
+<div id="requestList">
+    @await Html.PartialAsync("_RequestListPartial", Model)
+</div>
 
-<nav>
-    <ul class="pagination">
-    @for (int i = 1; i <= Model.TotalPages; i++)
-        {
-            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="@i"> @i </a>
-            </li>
-        }
-</ul>
-</nav>
+<!-- Yeni Talep Modalı -->
+<div class="modal fade" id="createRequestModal" tabindex="-1" aria-labelledby="createRequestModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="createRequestForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createRequestModalLabel">Yeni Talep Oluştur</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="Title" class="form-label">Başlık</label>
+                        <input type="text" class="form-control" id="Title" name="Title" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Description" class="form-label">Açıklama</label>
+                        <textarea class="form-control" id="Description" name="Description" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // Yeni Talep Ajax Post
+            $('#createRequestForm').on('submit', function (e) {
+                e.preventDefault();
+
+                const formData = $(this).serialize();
+
+                $.ajax({
+                    url: '/Request/Create',
+                    type: 'POST',
+                    data: formData,
+                    success: function () {
+                        $('#createRequestModal').modal('hide');
+                        $('#createRequestForm')[0].reset();
+
+                        // Listeyi Ajax ile yenile
+                        $('#requestList').load('/Request/List');
+                    },
+                    error: function () {
+                        alert('Talep oluşturulurken bir hata oluştu.');
+                    }
+                });
+            });
+
+            // Sayfa numaralarına tıklama
+            window.loadPage = function (page) {
+                $('#requestList').load('/Request/List?page=' + page);
+            };
+        });
+    </script>
+}
+
+
+
+
+
+}
+
 

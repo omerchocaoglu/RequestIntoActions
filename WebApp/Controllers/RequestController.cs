@@ -1,4 +1,5 @@
 ﻿using Application.Repositories;
+using Domain.DTOModels;
 using Domain.EntitiyModels.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
@@ -14,6 +15,7 @@ namespace WebApp.Controllers
             _unitOfWork = unitOfWork;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index( int page = 1, int pageSize = 5 )
         {
             var userIdStr = HttpContext.Session.GetString("UserID");
@@ -35,6 +37,27 @@ namespace WebApp.Controllers
 
             return View(viewModel);
         }
+        // Bu List sadece Ajax için tablo döner
+        [HttpGet]
+        public async Task<IActionResult> List(int page = 1, int pageSize = 5)
+        {
+            var userIdStr = HttpContext.Session.GetString("UserID");
+            if (string.IsNullOrEmpty(userIdStr))
+            {
+                return Unauthorized();
+            }
+            int userID = int.Parse(userIdStr);
+            var requests = await _unitOfWork.Requests.GetAllAsync( r => r.UserID == userID);
+            var totalCount = requests.Count();
+            var pagedRequests = requests.Skip((page -1 ) * pageSize ).Take(pageSize).ToList();
+            var viewModel = new RequestListViewModel
+            {
+                Requests = pagedRequests,
+                CurrentPage = page,
+                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+            };
+            return PartialView("_RequestListPartial", viewModel);
+        }
         // Create
         [HttpGet]
         public IActionResult Create()
@@ -47,19 +70,43 @@ namespace WebApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(Request request)
+        //public async Task<IActionResult> Create(Request request)
+        //{
+        //    var userIdStr = HttpContext.Session.GetString("UserID");
+        //    if (string.IsNullOrEmpty(userIdStr))
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+
+        //    request.UserID = int.Parse(userIdStr);
+        //    await _unitOfWork.Requests.AddAsync(request);
+        //    await _unitOfWork.CompleteAsync();
+
+        //    return RedirectToAction("Index");
+        //}
+        [HttpPost]
+        public async Task<IActionResult> Create(RequestCreateDTO dto)
         {
             var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr))
+            if ( string.IsNullOrEmpty(userIdStr))
             {
-                return RedirectToAction("Login", "Account");
+                return Unauthorized();
             }
-
-            request.UserID = int.Parse(userIdStr);
+            if ( !ModelState.IsValid )
+            {
+                return BadRequest(ModelState);
+            }
+            var request = new Request
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                StartedDate = DateTime.Now,
+                UserID = int.Parse(userIdStr)
+            };
+            
             await _unitOfWork.Requests.AddAsync(request);
             await _unitOfWork.CompleteAsync();
-
-            return RedirectToAction("Index");
+            return Ok(); // Ajax'ta başarılı mesaj döner
         }
         // Edit
         [HttpGet]

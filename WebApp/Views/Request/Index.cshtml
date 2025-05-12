@@ -75,6 +75,28 @@
                 $('#requestList').load('/Request/List?page=' + page);
             };
         });
+
+        // Silme işlemi (Delegated binding)
+        $('#requestList').on('click', '.delete-request', function () {
+            if (!confirm("Bu talebi silmek istediğinizden emin misiniz?")) {
+                return;
+            }
+
+            const id = $(this).data('id');
+
+            $.ajax({
+                url: '/Request/DeleteConfirmed',
+                type: 'POST',
+                data: { id: id },
+                success: function () {
+                    $('#requestList').load('/Request/List');
+                },
+                error: function () {
+                    alert('Silme işlemi sırasında bir hata oluştu.');
+                }
+            });
+        });
+
     </script>
 }
 

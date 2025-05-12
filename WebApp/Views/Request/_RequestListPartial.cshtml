@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Domain.EntitiyModels.RequestModels.Request>  
+﻿@model WebApp.Models.RequestListViewModel 
 
 <table class="table table-bordered">
     <thead>
@@ -9,13 +9,29 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Requests)
         {
             <tr>
                 <td>@item.Title</td>
                 <td>@item.Description</td>
                 <td>@item.StartedDate.ToString("dd.MM.yyyy")</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="/Request/Edit/@item.ID">Düzenle</a>
+                    <button class="btn btn-sm btn-danger delete-request" data-id="@item.ID">Sil</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Sayfalama -->
+<nav>
+    <ul class="pagination">
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                <a class="page-link" href="javascript:void(0);" onclick="loadPage(@i)">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -14,7 +14,6 @@ namespace WebApp.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-
         [HttpGet]
         public async Task<IActionResult> Index( int page = 1, int pageSize = 5 )
         {
@@ -150,24 +149,42 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
         //Delete
-
-        public async Task<IActionResult> Delete(int ID)
+        [HttpGet]
+        //public async Task<IActionResult> Delete(int ID)
+        //{
+        //    var userIdStr = HttpContext.Session.GetString("UserID");
+        //    if (string.IsNullOrEmpty(userIdStr)) 
+        //    {
+        //        return RedirectToAction("Login", "Account");
+        //    }
+        //    int userID = int.Parse(userIdStr);
+        //    var request = await _unitOfWork.Requests.GetByIdAsync(ID);
+        //    if (request == null || request.UserID != userID )
+        //    {
+        //        return Unauthorized();
+        //    }
+            
+        //    _unitOfWork.Requests.Delete(request);
+        //    await _unitOfWork.CompleteAsync();
+        //    return RedirectToAction("Index");
+        //}
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int ID)
         {
             var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr)) 
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            int userID = int.Parse(userIdStr);
-            var request = await _unitOfWork.Requests.GetByIdAsync(ID);
-            if (request == null || request.UserID != userID )
+            if (string.IsNullOrEmpty(userIdStr))
             {
                 return Unauthorized();
             }
-            
+            var request = await _unitOfWork.Requests.GetByIdAsync(ID);
+            if (request == null || request.UserID != int.Parse(userIdStr))
+            {
+                return NotFound();
+            }
             _unitOfWork.Requests.Delete(request);
             await _unitOfWork.CompleteAsync();
-            return RedirectToAction("Index");
+
+            return Ok();
         }
     }
 }

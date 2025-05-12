@@ -83,7 +83,7 @@ namespace WebApp.Controllers
 
         //    return RedirectToAction("Index");
         //}
-        [HttpPost]
+        [HttpPost] // ajax ile yapılan create metodu
         public async Task<IActionResult> Create(RequestCreateDTO dto)
         {
             var userIdStr = HttpContext.Session.GetString("UserID");
@@ -149,7 +149,7 @@ namespace WebApp.Controllers
             return RedirectToAction("Index");
         }
         //Delete
-        [HttpGet]
+        [HttpGet] // bu klasik yapılan delete metodu
         //public async Task<IActionResult> Delete(int ID)
         //{
         //    var userIdStr = HttpContext.Session.GetString("UserID");
@@ -168,7 +168,7 @@ namespace WebApp.Controllers
         //    await _unitOfWork.CompleteAsync();
         //    return RedirectToAction("Index");
         //}
-        [HttpPost]
+        [HttpPost] // ajax ile yapılan delete metodu
         public async Task<IActionResult> Delete(int ID)
         {
             var userIdStr = HttpContext.Session.GetString("UserID");

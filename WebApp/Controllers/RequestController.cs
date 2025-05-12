@@ -169,7 +169,7 @@ namespace WebApp.Controllers
         //    return RedirectToAction("Index");
         //}
         [HttpPost]
-        public async Task<IActionResult> DeleteConfirmed(int ID)
+        public async Task<IActionResult> Delete(int ID)
         {
             var userIdStr = HttpContext.Session.GetString("UserID");
             if (string.IsNullOrEmpty(userIdStr))

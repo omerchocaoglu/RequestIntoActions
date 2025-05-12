@@ -85,7 +85,7 @@
             const id = $(this).data('id');
 
             $.ajax({
-                url: '/Request/DeleteConfirmed',
+                url: '/Request/Delete',
                 type: 'POST',
                 data: { id: id },
                 success: function () {

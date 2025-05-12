@@ -1,16 +1,21 @@
-﻿@model Domain.EntitiyModels.RequestModels.Request
+﻿@model Domain.DTOModels.RequestUpdateDTO
 
 <form id="editRequestForm">
     <input type="hidden" name="ID" value="@Model.ID" />
+    
     <div class="mb-3">
         <label for="Title" class="form-label">Başlık</label>
-        <input type="text" class="form-control" name="Title" value="@Model.Title" required />
+        <input type="text" class="form-control" name="Title" id="EditTitle" value="@Model.Title" required />
     </div>
+
     <div class="mb-3">
         <label for="Description" class="form-label">Açıklama</label>
-        <textarea class="form-control" name="Description" required>@Model.Description</textarea>
+        <textarea class="form-control" name="Description" id="EditDescription" required>@Model.Description</textarea>
     </div>
+
     <div class="modal-footer">
         <button type="submit" class="btn btn-success">Güncelle</button>
     </div>
 </form>
+
+

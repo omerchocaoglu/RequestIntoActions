@@ -29,8 +29,6 @@
         </div>
     </div>
 </div>
-
-
 <!-- Yeni Talep Modalı -->
 <div class="modal fade" id="createRequestModal" tabindex="-1" aria-labelledby="createRequestModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -112,18 +110,22 @@
                 }
             });
         });
-                // Düzenle butonuna tıklanınca modala form yükle
-        $('#requestList').on('click', '.edit-request', function () {
+        // Talep düzenleme formunu modal’a yükle
+        $('#requestList').on('click', '.edit-request', function (e) {
+            e.preventDefault();
             const id = $(this).data('id');
-            $.get('/Request/Edit/' + id, function (data) {
-                $('#editRequestModalBody').html(data);
+            // console.log("Düzenleye basıldı, id: ", id); // Ekledik
+
+            $.get('/Request/Edit/' + id, function (html) {
+                $('#editRequestModalBody').html(html);
                 $('#editRequestModal').modal('show');
             });
         });
 
-        // Form gönderimi
-        $(document).on('submit', '#editRequestForm', function (e) {
+        // Güncelleme formu submit
+        $('#editRequestModal').on('submit', '#editRequestForm', function (e) {
             e.preventDefault();
+
             const formData = $(this).serialize();
 
             $.ajax({
@@ -135,10 +137,12 @@
                     $('#requestList').load('/Request/List');
                 },
                 error: function () {
-                    alert('Düzenleme sırasında bir hata oluştu.');
+                    alert('Güncelleme sırasında hata oluştu.');
                 }
             });
         });
+
+
     </script>
 }
 

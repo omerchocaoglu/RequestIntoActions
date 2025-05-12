@@ -20,4 +20,14 @@ namespace Domain.DTOModels
         [Required]
         public string Description { get; set; }
     }
+    public class RequestUpdateDTO
+    {
+        [Required]
+        public int ID {get; set; }
+        [Required(ErrorMessage = "Başlık boş bırakılamaz!")]
+        public string Title { get; set; }
+        [Required(ErrorMessage ="Açıklama boş bırakılamaz!")]
+        public string Description { get; set; }
+        public string? Message { get; set; }
+    }
 }

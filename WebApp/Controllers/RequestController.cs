@@ -69,20 +69,6 @@ namespace WebApp.Controllers
             return View();
         }
         [HttpPost]
-        //public async Task<IActionResult> Create(Request request)
-        //{
-        //    var userIdStr = HttpContext.Session.GetString("UserID");
-        //    if (string.IsNullOrEmpty(userIdStr))
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
-
-        //    request.UserID = int.Parse(userIdStr);
-        //    await _unitOfWork.Requests.AddAsync(request);
-        //    await _unitOfWork.CompleteAsync();
-
-        //    return RedirectToAction("Index");
-        //}
         public async Task<IActionResult> Create(RequestCreateDTO dto)
         {
             try
@@ -122,19 +108,6 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int ID)
         {
-            //var userIdStr = HttpContext.Session.GetString("UserID");
-            //if (string.IsNullOrEmpty(userIdStr))
-            //{
-            //    return RedirectToAction("Login", "Account");
-            //}
-            //int userID = int.Parse(userIdStr);
-            //var request = await _unitOfWork.Requests.GetByIdAsync(ID);
-            //if (request == null || request.UserID != userID)
-            //{
-            //    return Unauthorized();
-            //}
-            //return View(request);
-
             // ajax ile yapılmış hali
             var userIdStr = HttpContext.Session.GetString("UserID");
             if ( string.IsNullOrEmpty(userIdStr))
@@ -146,72 +119,35 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            return PartialView("_EditRequestPartial", request);
+            var dto = new RequestUpdateDTO
+            {
+                ID = request.ID,
+                Title = request.Title,
+                Description = request.Description
+            };
+            return PartialView("_RequestEditPartial", dto);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Request request)
+        public async Task<IActionResult> Edit(RequestUpdateDTO dto)
         {
-            //var userIdStr = HttpContext.Session.GetString("UserID");
-            //if (string.IsNullOrEmpty(userIdStr))
-            //{
-            //    return RedirectToAction("Login", "Account");
-            //}
-
-            //int userID = int.Parse(userIdStr);
-            //var exiting = await _unitOfWork.Requests.GetByIdAsync(request.ID);
-            //if (exiting == null || exiting.UserID != userID)
-            //{
-            //    return Unauthorized();
-            //}
-
-            ////Güncellenecek kısım
-            //exiting.Title = request.Title;
-            //exiting.Description = request.Description;
-            //_unitOfWork.Requests.Update(exiting);
-            //await _unitOfWork.CompleteAsync();
-
-            //return RedirectToAction("Index");
-
-            //Ajaxla edit işlemi
             var userIdStr = HttpContext.Session.GetString("UserID");
-            if ( string.IsNullOrEmpty(userIdStr))
-            {
+            if (string.IsNullOrEmpty(userIdStr))
                 return Unauthorized();
-            }
 
-            //Güncellenecek kısım
-            var existingRequest = await _unitOfWork.Requests.GetByIdAsync(request.ID);
-            if (existingRequest == null || existingRequest.UserID != int.Parse(userIdStr))
-            {
+            var request = await _unitOfWork.Requests.GetByIdAsync(dto.ID);
+            if (request == null || request.UserID != int.Parse(userIdStr))
                 return NotFound();
-            }
-            existingRequest.Title = request.Title;
-            existingRequest.Description = request.Description;
 
-            _unitOfWork.Requests.Update(existingRequest);
+            request.Title = dto.Title;
+            request.Description = dto.Description;
+            request.Message = dto.Message;
+
             await _unitOfWork.CompleteAsync();
+
             return Ok();
         }
+
         //Delete
-        //[HttpGet] // bu klasik yapılan delete metodu
-        //public async Task<IActionResult> Delete(int ID)
-        //{
-        //    var userIdStr = HttpContext.Session.GetString("UserID");
-        //    if (string.IsNullOrEmpty(userIdStr)) 
-        //    {
-        //        return RedirectToAction("Login", "Account");
-        //    }
-        //    int userID = int.Parse(userIdStr);
-        //    var request = await _unitOfWork.Requests.GetByIdAsync(ID);
-        //    if (request == null || request.UserID != userID )
-        //    {
-        //        return Unauthorized();
-        //    }
-            
-        //    _unitOfWork.Requests.Delete(request);
-        //    await _unitOfWork.CompleteAsync();
-        //    return RedirectToAction("Index");
-        //}
         [HttpPost] // ajax ile yapılan delete metodu
         public async Task<IActionResult> Delete(int ID)
         {

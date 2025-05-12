@@ -89,6 +89,8 @@ namespace WebApp.Controllers
                     Title = dto.Title,
                     Description = dto.Description,
                     StartedDate = DateTime.Now,
+                    CreatedBy = int.Parse(userIdStr),
+                    CreateOn = DateTime.Now,
                     UserID = int.Parse(userIdStr)
                 };
 
@@ -141,6 +143,8 @@ namespace WebApp.Controllers
             request.Title = dto.Title;
             request.Description = dto.Description;
             request.Message = dto.Message;
+            request.CreatedBy = dto.ID;
+            request.CreateOn = DateTime.Now;
 
             await _unitOfWork.CompleteAsync();
 

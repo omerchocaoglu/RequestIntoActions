@@ -1,0 +1,40 @@
+﻿<!-- Modal -->
+<div class="modal fade" id="addActionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Yeni Aksiyon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="addActionModalBody">
+                <!-- Buraya partial yüklenecek -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-success" onclick="openAddActionModal(@Model.Id)">+ Aksiyon Ekle</button>
+
+@section Scripts {
+    <script>
+        function openAddActionModal(requestId) {
+            $.get('/Action/Add', { requestId: requestId }, function (html) {
+                $('#addActionModalBody').html(html);
+                $('#addActionModal').modal('show');
+
+                $('#addActionForm').submit(function (e) {
+                    e.preventDefault();
+                    var formData = $(this).serialize();
+
+                    $.post('/Action/Add', formData, function (response) {
+                        if (response.success) {
+                            $('#addActionModal').modal('hide');
+                            alert("Aksiyon başarıyla eklendi!");
+                            // Gerekirse sayfayı yenile veya tabloyu güncelle
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+}

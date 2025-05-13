@@ -1,0 +1,20 @@
+﻿@model Domain.DTOModels.RequestActionCreateDto
+
+@{
+    ViewData["Title"] = "Aksiyon Ekle";
+}
+
+<h2>Aksiyon Ekle</h2>
+
+<form asp-action="Add" method="post">
+    <input type="hidden" asp-for="RequestID" />
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Açıklama</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+    <a asp-controller="Request" asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

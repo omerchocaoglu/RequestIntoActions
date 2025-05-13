@@ -26,7 +26,7 @@ namespace Domain.EntitiyModels.RequestModels
         [DisplayName("Açıklama")]
         public string? Description { get; set; }
         [DisplayName("Başlangıç Zamanı")]
-        public DateTime StartedDate { get; set; }
+        public DateTime StartedDate { get; set; } 
         [DisplayName("Bitiş Zamanı")]
         public DateTime FinishedDate { get; set; }
         public ICollection<ActionModels.RequestAction> Actions { get; set; }

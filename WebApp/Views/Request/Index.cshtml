@@ -55,6 +55,23 @@
         </div>
     </div>
 </div>
+<!-- Aksiyon Ekle Modal -->
+<div class="modal fade" id="addActionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Aksiyon Ekle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="addActionModalBody">
+                <!-- Partial buraya yüklenecek -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 @section Scripts {
     <script>
@@ -141,7 +158,35 @@
                 }
             });
         });
+                function openAddActionModal(requestID) {
+            $.get('/Action/Add?requestID=' + requestID, function (html) {
+                $('#addActionModalBody').html(html);
+                $('#addActionModal').modal('show');
+            }).fail(function (xhr) {
+                alert("Form yüklenemedi: " + xhr.status + " - " + xhr.responseText);
+            });
+        }
 
+        $(document).on('submit', '#addActionForm', function (e) {
+            e.preventDefault();
+
+            const form = $(this);
+            const formData = form.serialize();
+
+            $.ajax({
+                url: '/Action/Add',
+                type: 'POST',
+                data: formData,
+                success: function () {
+                    $('#addActionModal').modal('hide');
+                    alert("Aksiyon başarıyla eklendi.");
+                    // Listeyi yeniden yüklemek istersen burada yap
+                },
+                error: function (xhr) {
+                    $('#addActionModalBody').html(xhr.responseText); // validation hataları için tekrar göster
+                }
+            });
+        });
 
     </script>
 }

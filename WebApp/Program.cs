@@ -1,5 +1,7 @@
 using Application.Repositories;
+using Application.Services;
 using Infrastructure.Context;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Repositories;
 
@@ -12,6 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(buil
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IRequestActionService, RequestActionService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

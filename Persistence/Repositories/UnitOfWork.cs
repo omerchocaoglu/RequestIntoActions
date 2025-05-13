@@ -15,6 +15,8 @@ namespace Persistence.Repositories
 
         public IRequestRepository Requests { get; }
 
+        public IRequestActionRepository RequestActions { get; }
+
         public UnitOfWork(AppDbContext context, IRequestRepository requestRepository)
         {
             _context = context;

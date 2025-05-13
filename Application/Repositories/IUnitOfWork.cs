@@ -9,6 +9,7 @@ namespace Application.Repositories
     public interface IUnitOfWork:IDisposable
     {
         IRequestRepository Requests { get; }
+        IRequestActionRepository RequestActions { get; }
         Task<int> CompleteAsync(); // async SaveChanges
     }
 }

@@ -43,6 +43,7 @@ namespace Persistence.Repositories
                 ID = user.ID,
                 Email = user.Email,
                 FullName = user.Name + " " + user.SurName,
+                UserName = user.Name,
                 // diğer gerekli alanlar
             };
         }

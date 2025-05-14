@@ -69,9 +69,22 @@
         </div>
     </div>
 </div>
-
-
-
+<!-- Action List Modal -->
+<div class="modal fade" id="actionListModal" tabindex="-1" aria-labelledby="actionListModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actionListModalLabel">Talepe Ait Aksiyonlar</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="actionList" class="list-group">
+                    <!-- Partial buraya yüklenecek -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
@@ -166,7 +179,7 @@
                 alert("Form yüklenemedi: " + xhr.status + " - " + xhr.responseText);
             });
         }
-
+        // Aksiyon ekleme
         $(document).on('submit', '#addActionForm', function (e) {
             e.preventDefault();
 
@@ -187,6 +200,36 @@
                 }
             });
         });
+        // Aksiyonları Modal ile görme
+        function showActionsModal(requestID) {
+            $.ajax({
+                url: '/Action/ActionsByRequest',
+                type: 'GET',
+                data: { requestID: requestID },
+                success: function (data) {
+                    let html = '';
+
+                    if (data.length === 0) {
+                        html = `<li class="list-group-item text-muted">Bu talebe ait aksiyon bulunmamaktadır.</li>`;
+                    } else {
+                        data.forEach(function (action) {
+                            html += `
+                                <li class="list-group-item">
+                                    <div><strong>${action.userName}</strong> (${action.email})</div>
+                                    <div>${action.description}</div>
+                                    <div><small class="text-muted">${new Date(action.createdAt).toLocaleString()}</small></div>
+                                </li>`;
+                        });
+                    }
+
+                    $('#actionList').html(html);
+                    $('#actionListModal').modal('show');
+                },
+                error: function () {
+                    alert("Aksiyonlar yüklenirken hata oluştu.");
+                }
+            });
+        }
 
     </script>
 }

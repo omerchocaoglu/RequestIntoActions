@@ -36,6 +36,7 @@ namespace WebApp.Controllers
                 HttpContext.Session.SetString("UserID", user.ID.ToString());
                 HttpContext.Session.SetString("Username", user.Email);
                 HttpContext.Session.SetString("UserRole", user.FullName);
+                HttpContext.Session.SetString("UserName", user.UserName);
 
                 return RedirectToAction("Index", "Request");
             }

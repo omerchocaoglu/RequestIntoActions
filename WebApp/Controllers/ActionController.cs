@@ -2,6 +2,8 @@
 using Domain.EntitiyModels.ActionModels;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace WebApp.Controllers
 {
@@ -42,6 +44,23 @@ namespace WebApp.Controllers
                 return Ok();
             }
             return PartialView("_AddActionPartial", dto);
+        }
+        public IActionResult ActionsByRequest (int RequestID)
+        {
+            var actions = _context.Actions
+            .Where(a => a.RequestID == RequestID)
+            .Include(a => a.User)
+            .OrderByDescending(a => a.StartedDate)
+            .Select(a => new RequestActionListDto
+            {
+                Description = a.Description,
+                CreatedAt = a.StartedDate,
+                UserName = a.User.Name,
+                Email = a.User.Email
+            })
+            .ToList();
+
+            return Json(actions);
         }
     }
 }

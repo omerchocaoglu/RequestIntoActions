@@ -24,4 +24,11 @@ namespace Domain.DTOModels
         public DateTime StartedDate { get; set; } = DateTime.Now;
         public DateTime FinishedDate { get; set; } = DateTime.Now;
     }
+    public class RequestActionListDto
+    {
+        public string Description { get; set; }
+        public DateTime CreatedAt {  get; set; }
+        public string? UserName { get; set; }
+        public string? Email { get; set; }
+    }
 }

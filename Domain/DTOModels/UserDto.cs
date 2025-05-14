@@ -12,6 +12,7 @@ namespace Domain.DTOModels
         public int ID { get; set; }
         public string Email { get; set; } = null!;
         public string FullName { get; set; } = null!;
+        public string? UserName { get; set; }
     }
     public class RequestCreateDTO
     {

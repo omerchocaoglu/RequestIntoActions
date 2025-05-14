@@ -1,4 +1,5 @@
-﻿using Domain.EntitiyModels.RequestModels;
+﻿using Domain.EntitiyModels.ActionModels;
+using Domain.EntitiyModels.RequestModels;
 
 namespace WebApp.Models
 {

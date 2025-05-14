@@ -3,6 +3,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
+            <th> Kullanıcı </th>
             <th>Başlık</th>
             <th>Açıklama</th>
             <th>Oluşturulma Tarihi</th>
@@ -12,7 +13,8 @@
     <tbody>
         @foreach (var item in Model.Requests)
         {
-            <tr>
+            <tr id="row-@item.ID">
+                <td> @Context.Session.GetString("UserName") </td>
                 <td>@item.Title</td>
                 <td>@item.Description</td>
                 <td>@item.StartedDate.ToString("dd.MM.yyyy")</td>
@@ -38,3 +40,6 @@
         }
     </ul>
 </nav>
+<script>
+    $("#row-" + id).remove(); // Silinen satırı DOM’dan kaldırır
+</script>

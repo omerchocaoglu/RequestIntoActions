@@ -1,6 +1,7 @@
 ﻿using Application.Repositories;
 using Domain.DTOModels;
 using Domain.EntitiyModels.RequestModels;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -17,56 +18,80 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Index( int page = 1, int pageSize = 5 )
         {
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr))
+            try
             {
-                return RedirectToAction("Login", "Account");
-            }
-            int userID = int.Parse(userIdStr);
-            var requests = await _unitOfWork.Requests.GetAllAsync(r => r.UserID == userID);
-            var totalCount = requests.Count();
-            // pagination işlemleri için
-            var pagedRequests = requests.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            var viewModel = new RequestListViewModel
-            {
-                Requests = pagedRequests,
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
-            };
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (string.IsNullOrEmpty(userIdStr))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                int userID = int.Parse(userIdStr);
+                // bu şekilde index'te ObjectStatus'ı NonDeleted olanlar gözükecek
+                var requests = await _unitOfWork.Requests.GetAllAsync(r => r.UserID == userID && r.ObjectStatus == ObjectStatus.NonDeleted);
+                var totalCount = requests.Count();
+                // pagination işlemleri için
+                var pagedRequests = requests.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                var viewModel = new RequestListViewModel
+                {
+                    Requests = pagedRequests,
+                    CurrentPage = page,
+                    TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         // Bu List sadece Ajax için tablo döner
         [HttpGet]
         public async Task<IActionResult> List(int page = 1, int pageSize = 5)
         {
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr))
+            try
             {
-                return Unauthorized();
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (string.IsNullOrEmpty(userIdStr))
+                {
+                    return Unauthorized();
+                }
+                int userID = int.Parse(userIdStr);
+                var requests = await _unitOfWork.Requests.GetAllAsync(r => r.UserID == userID && r.ObjectStatus == ObjectStatus.NonDeleted);
+                var totalCount = requests.Count();
+                var pagedRequests = requests.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                var viewModel = new RequestListViewModel
+                {
+                    Requests = pagedRequests,
+                    CurrentPage = page,
+                    TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
+                };
+                return PartialView("_RequestListPartial", viewModel);
             }
-            int userID = int.Parse(userIdStr);
-            var requests = await _unitOfWork.Requests.GetAllAsync( r => r.UserID == userID);
-            var totalCount = requests.Count();
-            var pagedRequests = requests.Skip((page -1 ) * pageSize ).Take(pageSize).ToList();
-            var viewModel = new RequestListViewModel
+            catch (Exception)
             {
-                Requests = pagedRequests,
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling((double)totalCount / pageSize)
-            };
-            return PartialView("_RequestListPartial", viewModel);
+                throw;
+            }
         }
         // Create
         [HttpGet]
         public IActionResult Create()
         {
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr))
+            try
             {
-                return RedirectToAction("Login", "Account");
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (string.IsNullOrEmpty(userIdStr))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                return View();
             }
-            return View();
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Create(RequestCreateDTO dto)
@@ -91,7 +116,9 @@ namespace WebApp.Controllers
                     StartedDate = DateTime.Now,
                     CreatedBy = int.Parse(userIdStr),
                     CreateOn = DateTime.Now,
-                    UserID = int.Parse(userIdStr)
+                    UserID = int.Parse(userIdStr),
+                    ObjectStatus = ObjectStatus.NonDeleted,
+                    Status = Status.Active
                 };
 
                 await _unitOfWork.Requests.AddAsync(request);
@@ -110,65 +137,95 @@ namespace WebApp.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int ID)
         {
-            // ajax ile yapılmış hali
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if ( string.IsNullOrEmpty(userIdStr))
+            try
             {
-                return Unauthorized();
+                // ajax ile yapılmış hali
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (string.IsNullOrEmpty(userIdStr))
+                {
+                    return Unauthorized();
+                }
+                var request = await _unitOfWork.Requests.GetByIdAsync(ID);
+                if (request == null || request.UserID != int.Parse(userIdStr))
+                {
+                    return NotFound();
+                }
+                var dto = new RequestUpdateDTO
+                {
+                    ID = request.ID,
+                    Title = request.Title,
+                    Description = request.Description
+                };
+                return PartialView("_RequestEditPartial", dto);
             }
-            var request = await _unitOfWork.Requests.GetByIdAsync(ID);
-            if ( request == null || request.UserID != int.Parse(userIdStr))
+            catch (Exception)
             {
-                return NotFound();
+
+                throw;
             }
-            var dto = new RequestUpdateDTO
-            {
-                ID = request.ID,
-                Title = request.Title,
-                Description = request.Description
-            };
-            return PartialView("_RequestEditPartial", dto);
         }
         [HttpPost]
         public async Task<IActionResult> Edit(RequestUpdateDTO dto)
         {
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr))
-                return Unauthorized();
+            try
+            {
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (string.IsNullOrEmpty(userIdStr))
+                    return Unauthorized();
 
-            var request = await _unitOfWork.Requests.GetByIdAsync(dto.ID);
-            if (request == null || request.UserID != int.Parse(userIdStr))
-                return NotFound();
+                var request = await _unitOfWork.Requests.GetByIdAsync(dto.ID);
+                if (request == null || request.UserID != int.Parse(userIdStr))
+                    return NotFound();
 
-            request.Title = dto.Title;
-            request.Description = dto.Description;
-            request.Message = dto.Message;
-            request.CreatedBy = dto.ID;
-            request.CreateOn = DateTime.Now;
+                request.Title = dto.Title;
+                request.Description = dto.Description;
+                request.Message = dto.Message;
+                request.CreatedBy = dto.ID;
+                request.CreateOn = DateTime.Now;
 
-            await _unitOfWork.CompleteAsync();
+                await _unitOfWork.CompleteAsync();
 
-            return Ok();
+                return Ok();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         //Delete
         [HttpPost] // ajax ile yapılan delete metodu
         public async Task<IActionResult> Delete(int ID)
         {
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if (string.IsNullOrEmpty(userIdStr))
+            try
             {
-                return Unauthorized();
-            }
-            var request = await _unitOfWork.Requests.GetByIdAsync(ID);
-            if (request == null || request.UserID != int.Parse(userIdStr))
-            {
-                return NotFound();
-            }
-            _unitOfWork.Requests.Delete(request);
-            await _unitOfWork.CompleteAsync();
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (string.IsNullOrEmpty(userIdStr))
+                {
+                    return Unauthorized();
+                }
+                var request = await _unitOfWork.Requests.GetByIdAsync(ID);
+                if (request == null || request.UserID != int.Parse(userIdStr))
+                {
+                    return NotFound();
+                }
+                // Soft delete işlemi
+                request.ObjectStatus = ObjectStatus.Deleted;
+                request.Status = Status.Passive;
+                request.LastModifiedOn = DateTime.Now;
+                request.LastModifiedBy = int.Parse(userIdStr);
 
-            return Ok();
+                _unitOfWork.Requests.Update(request);
+                await _unitOfWork.CompleteAsync();
+
+                return Ok();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

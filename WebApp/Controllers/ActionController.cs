@@ -17,50 +17,74 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Add(int RequestID)
         {
-            var dto = new RequestActionCreateDto
+            try
             {
-                RequestID = RequestID,
-            };
-            return PartialView("_AddActionPartial", dto);
+                var dto = new RequestActionCreateDto
+                {
+                    RequestID = RequestID,
+                };
+                return PartialView("_AddActionPartial", dto);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Add(RequestActionCreateDto dto)
         {
-            var userIdStr = HttpContext.Session.GetString("UserID");
-            if(ModelState.IsValid)
+            try
             {
-                var entity = new RequestAction
+                var userIdStr = HttpContext.Session.GetString("UserID");
+                if (ModelState.IsValid)
                 {
+                    var entity = new RequestAction
+                    {
 
-                    UserID = int.Parse(userIdStr),
-                    RequestID = dto.RequestID,
-                    Message = dto.Message,
-                    Description = dto.Description,
-                    StartedDate = dto.StartedDate,
-                    FinishedDate = dto.FinishedDate,
-                };
-                _context.Actions.Add(entity);
-                await _context.SaveChangesAsync();
-                return Ok();
+                        UserID = int.Parse(userIdStr),
+                        RequestID = dto.RequestID,
+                        Message = dto.Message,
+                        Description = dto.Description,
+                        StartedDate = dto.StartedDate,
+                        FinishedDate = dto.FinishedDate,
+                    };
+                    _context.Actions.Add(entity);
+                    await _context.SaveChangesAsync();
+                    return Ok();
+                }
+                return PartialView("_AddActionPartial", dto);
             }
-            return PartialView("_AddActionPartial", dto);
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         public IActionResult ActionsByRequest (int RequestID)
         {
-            var actions = _context.Actions
-            .Where(a => a.RequestID == RequestID)
-            .Include(a => a.User)
-            .OrderByDescending(a => a.StartedDate)
-            .Select(a => new RequestActionListDto
+            try
             {
+                var actions = _context.Actions
+                .Where(a => a.RequestID == RequestID)
+                .Include(a => a.User)
+                .OrderByDescending(a => a.StartedDate)
+                .Select(a => new RequestActionListDto
+                {
                 Description = a.Description,
                 CreatedAt = a.StartedDate,
                 UserName = a.User.Name,
                 Email = a.User.Email
-            })
-            .ToList();
+                })
+                .ToList();
 
-            return Json(actions);
+                return Json(actions);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

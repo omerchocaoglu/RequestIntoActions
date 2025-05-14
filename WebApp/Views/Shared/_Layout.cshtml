@@ -34,13 +34,18 @@
                                 </form>
                             }
                         </li>
-                        <li>
-                            @if (!string.IsNullOrEmpty( Context.Session.GetString("UserID")))
-                            {
-                                <span>
-                                    Merhaba, <span class="fw-bold"> @Context.Session.GetString("UserName") </span>
-                                </span>
-                            }
+                        <li class="nav-item">
+
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class=" nav-item me-5">
+                        @if (!string.IsNullOrEmpty(Context.Session.GetString("UserID")))
+                        {
+                            <span>
+                                Merhaba, <span class="fw-bold"> @Context.Session.GetString("UserName") </span>
+                            </span>
+                        }
                         </li>
                     </ul>
                 </div>

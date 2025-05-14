@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Repositories;
 using Domain.EntitiyModels.BaseEntitityModels;
+using Domain.EntitiyModels.UserModels;
 using Domain.Enums;
 using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -80,7 +81,8 @@ namespace Persistence.Repositories
             {
                 entity.ObjectStatus = ObjectStatus.Deleted;
                 entity.Status = Status.Passive;
-                _dbSet.Remove(entity);
+                _dbSet.Update(entity);
+                entity.LastModifiedOn = DateTime.Now;
             }
             catch (Exception)
             {

@@ -15,40 +15,63 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+            try
             {
-                return RedirectToAction("Index", "Home");
+                if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                // Yetkili kullanıcıysa devam et
+                return View();
             }
-            // Yetkili kullanıcıysa devam et
-            return View();
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var user = await _userRepository.GetUserAsync(username, password);
-            if (user == null)
+            try
             {
-                ViewBag.Error = "Kullanıcı bulunamadı.";
+                var user = await _userRepository.GetUserAsync(username, password);
+                if (user == null)
+                {
+                    ViewBag.Error = "Kullanıcı bulunamadı.";
+                    return View();
+                }
+                if (user != null)
+                {
+                    HttpContext.Session.SetString("UserID", user.ID.ToString());
+                    HttpContext.Session.SetString("Username", user.Email);
+                    HttpContext.Session.SetString("UserRole", user.FullName);
+                    HttpContext.Session.SetString("UserName", user.UserName);
+
+                    return RedirectToAction("Index", "Request");
+                }
+                ViewBag.Error = "Geçersiz kullanacı adı veya şifre";
                 return View();
             }
-            if (user != null) 
+            catch (Exception)
             {
-                HttpContext.Session.SetString("UserID", user.ID.ToString());
-                HttpContext.Session.SetString("Username", user.Email);
-                HttpContext.Session.SetString("UserRole", user.FullName);
-                HttpContext.Session.SetString("UserName", user.UserName);
 
-                return RedirectToAction("Index", "Request");
+                throw;
             }
-            ViewBag.Error = "Geçersiz kullanacı adı veya şifre";
-            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken] // ekstra güvenlik katmanı için gereklidir
         public IActionResult Logout()
         {
-            HttpContext.Session.Clear(); // tüm sessionları temizle oturumu sıfırla
-            return RedirectToAction("Login", "Account");
+            try
+            {
+                HttpContext.Session.Clear(); // tüm sessionları temizle oturumu sıfırla
+                return RedirectToAction("Login", "Account");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

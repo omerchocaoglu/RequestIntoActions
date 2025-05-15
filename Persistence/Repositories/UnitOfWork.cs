@@ -17,10 +17,11 @@ namespace Persistence.Repositories
 
         public IRequestActionRepository RequestActions { get; }
 
-        public UnitOfWork(AppDbContext context, IRequestRepository requestRepository)
+        public UnitOfWork(AppDbContext context, IRequestRepository requestRepository, IRequestActionRepository requestActionRepository)
         {
             _context = context;
             Requests = requestRepository;
+            RequestActions = requestActionRepository;   
         }
 
         public async Task<int> CompleteAsync()

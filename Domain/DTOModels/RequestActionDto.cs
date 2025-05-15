@@ -26,9 +26,22 @@ namespace Domain.DTOModels
     }
     public class RequestActionListDto
     {
+        public int ID { get; set; }
+        public string Message {get; set;}
         public string Description { get; set; }
         public DateTime CreatedAt {  get; set; }
         public string? UserName { get; set; }
         public string? Email { get; set; }
     }
+    public class RequestActionUpdateDTO
+    {
+        public int ID { get; set; }
+        public int RequestID { get; set; }
+        [Required(ErrorMessage ="Başlık boş bırakılamaz")]
+        public string Message {get; set;}
+        [Required(ErrorMessage ="Açıklama boş bırakılamaz")]
+        public string Description {get; set;}
+        public DateTime StartedDate {get; set; }
+        public DateTime FinishedDate { get; set; }
+    } 
 }

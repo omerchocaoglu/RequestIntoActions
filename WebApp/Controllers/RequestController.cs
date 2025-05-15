@@ -180,8 +180,10 @@ namespace WebApp.Controllers
                 request.Title = dto.Title;
                 request.Description = dto.Description;
                 request.Message = dto.Message;
-                request.CreatedBy = dto.ID;
+                request.CreatedBy = int.Parse(userIdStr);
                 request.CreateOn = DateTime.Now;
+                request.LastModifiedOn = DateTime.Now;
+                request.LastModifiedBy = int.Parse(userIdStr);
 
                 await _unitOfWork.CompleteAsync();
 

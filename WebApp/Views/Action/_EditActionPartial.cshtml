@@ -1,0 +1,21 @@
+﻿@model Domain.DTOModels.RequestActionUpdateDTO
+
+<div class="modal-body">
+    <form id="editActionForm">
+        <input type="hidden" name="ID" asp-for="ID" />
+        <input type="hidden" asp-for="RequestID" />
+        <div class="mb-3">
+            <label asp-for="Message" class="form-label">Mesaj</label>
+            <input asp-for="Message" class="form-control" />
+            <span asp-validation-for="Message" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Açıklama</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Güncelle</button>
+        </div>
+    </form>
+</div>

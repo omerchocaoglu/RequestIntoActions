@@ -14,7 +14,6 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRequestActionRepository, RequestActionRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

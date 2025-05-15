@@ -10,6 +10,7 @@ namespace Application.Repositories
     {
         IRequestRepository Requests { get; }
         IRequestActionRepository RequestActions { get; }
+        IAuditLogRepository AuditLogs { get; }  
         Task<int> CompleteAsync(); // async SaveChanges
     }
 }

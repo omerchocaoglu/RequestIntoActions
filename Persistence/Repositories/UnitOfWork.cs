@@ -17,13 +17,20 @@ namespace Persistence.Repositories
 
         public IRequestActionRepository RequestActions { get; }
 
-        public UnitOfWork(AppDbContext context, IRequestRepository requestRepository, IRequestActionRepository requestActionRepository)
+        public IAuditLogRepository AuditLogs { get; }
+
+        public UnitOfWork(AppDbContext context, 
+                          IRequestRepository requestRepository,
+                          IRequestActionRepository requestActionRepository,
+                          IAuditLogRepository auditLogs
+                          )
         {
             _context = context;
             Requests = requestRepository;
-            RequestActions = requestActionRepository;   
+            RequestActions = requestActionRepository;
+            AuditLogs = auditLogs;
         }
-
+        // Not: Burada constructor’da repository’leri dışarıdan inject ediyoruz. Dependency Injection yapısı ile beraber kullanırsan otomatik gelir.
         public async Task<int> CompleteAsync()
         {
             return await _context.SaveChangesAsync();

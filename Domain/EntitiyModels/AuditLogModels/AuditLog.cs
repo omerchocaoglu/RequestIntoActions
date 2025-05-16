@@ -10,7 +10,6 @@ namespace Domain.EntitiyModels.AuditLogModels
 {
     public class AuditLog:BaseEntityModel
     {
-        public int ID { get; set; }
         [Display(Name = "Tablo Adı")]
         public string TableName { get; set; }
         [Display(Name = "Kayıt ID")]

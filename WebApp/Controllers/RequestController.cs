@@ -181,7 +181,6 @@ namespace WebApp.Controllers
                 request.Description = dto.Description;
                 request.Message = dto.Message;
                 request.CreatedBy = int.Parse(userIdStr);
-                request.CreateOn = DateTime.Now;
                 request.LastModifiedOn = DateTime.Now;
                 request.LastModifiedBy = int.Parse(userIdStr);
 

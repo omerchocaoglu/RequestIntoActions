@@ -31,10 +31,10 @@ namespace WebApp.Controllers
                 };
                 return PartialView("_AddActionPartial", dto);
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         [HttpPost]
@@ -92,10 +92,10 @@ namespace WebApp.Controllers
 
                 return Json(actions);
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         //Edit Action
@@ -120,10 +120,10 @@ namespace WebApp.Controllers
                 };
                 return PartialView("_EditActionPartial", dto);
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         [HttpPost]
@@ -155,10 +155,10 @@ namespace WebApp.Controllers
                 await _unitOfWork.CompleteAsync();
                 return Ok();    
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         //Delete Action
@@ -185,10 +185,10 @@ namespace WebApp.Controllers
 
                 return Ok();
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
 
-                return BadRequest(exception.Message);
+                throw e;
             }
         }
     }

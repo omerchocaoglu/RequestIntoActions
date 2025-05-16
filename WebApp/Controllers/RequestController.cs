@@ -2,6 +2,7 @@
 using Domain.DTOModels;
 using Domain.EntitiyModels.RequestModels;
 using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -40,10 +41,10 @@ namespace WebApp.Controllers
 
                 return View(viewModel);
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         // Bu List sadece Ajax için tablo döner
@@ -69,9 +70,9 @@ namespace WebApp.Controllers
                 };
                 return PartialView("_RequestListPartial", viewModel);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
         // Create
@@ -87,10 +88,10 @@ namespace WebApp.Controllers
                 }
                 return View();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         [HttpPost]
@@ -126,10 +127,9 @@ namespace WebApp.Controllers
 
                 return Ok();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                // Geçici loglama
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+                throw e;
             }
         }
 
@@ -158,10 +158,10 @@ namespace WebApp.Controllers
                 };
                 return PartialView("_RequestEditPartial", dto);
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         [HttpPost]
@@ -189,10 +189,10 @@ namespace WebApp.Controllers
 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
 
@@ -223,10 +223,10 @@ namespace WebApp.Controllers
 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
     }

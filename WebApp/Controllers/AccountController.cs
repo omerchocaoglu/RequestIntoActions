@@ -24,10 +24,10 @@ namespace WebApp.Controllers
                 // Yetkili kullanıcıysa devam et
                 return View();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         [HttpPost]
@@ -53,10 +53,10 @@ namespace WebApp.Controllers
                 ViewBag.Error = "Geçersiz kullanacı adı veya şifre";
                 return View();
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
         [HttpPost]
@@ -68,9 +68,9 @@ namespace WebApp.Controllers
                 HttpContext.Session.Clear(); // tüm sessionları temizle oturumu sıfırla
                 return RedirectToAction("Login", "Account");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw e;
             }
         }
     }

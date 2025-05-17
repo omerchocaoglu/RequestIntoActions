@@ -4,8 +4,16 @@
 
 @{
     ViewData["Title"] = "Taleplerim";
+    var username = Context.Session.GetString("UserName");
+    var formattedUserName = string.IsNullOrWhiteSpace(username) ? "" : char.ToUpper(username[0]) + username.Substring(1);
 }
 
+<div class="shadow-sm p-3 mb-5 bg-body-tertiary rounded mt-3">
+    <p class="p-2">
+        Merhaba,
+        <span class="fs-4"> @formattedUserName  </span>
+    </p>
+</div>
 <h2>@ViewData["Title"]</h2>
 
 <!-- Yeni Talep Butonu (Modal tetikleyici) -->
@@ -231,7 +239,7 @@
                                         <div><small class="text-muted">${new Date(action.createdAt).toLocaleString()}</small></div>
                                     </div>
                                     <div>
-                                        <button class="btn btn-sm btn-warning me-1" onclick="editAction(${action.id})">Düzenle</button>
+                                        <button class="btn btn-sm btn-success me-1" onclick="editAction(${action.id})">Düzenle</button>
                                         <button class="btn btn-sm btn-danger" onclick="deleteAction(${action.id}, ${requestID})">Sil</button>
                                     </div>
                                 </li>`;

@@ -1,9 +1,8 @@
 ﻿@model WebApp.Models.RequestListViewModel 
 
 <table class="table table-bordered">
-    <thead>
+    <thead class="table-dark">
         <tr>
-            <th> Kullanıcı </th>
             <th>Başlık</th>
             <th>Açıklama</th>
             <th>Oluşturulma Tarihi</th>
@@ -14,21 +13,27 @@
         @foreach (var item in Model.Requests)
         {
             <tr id="row-@item.ID">
-                <td> @Context.Session.GetString("UserName") </td>
                 <td>@item.Title</td>
                 <td>@item.Description</td>
                 <td>@item.StartedDate.ToString("dd.MM.yyyy")</td>
                 <td>
-                    <button class="btn btn-sm btn-success edit-request" data-id="@item.ID">Düzenle</button>
-                    <button class="btn btn-sm btn-danger delete-request" data-id="@item.ID">Sil</button>
-                    <button class="btn btn-sm btn-primary" onclick="openAddActionModal(@item.ID)">+ Aksiyon Ekle</button>
-                    <button class="btn btn-info btn-sm" onclick="showActionsModal(@item.ID)"> Aksiyonları Gör </button>
+                    <button title="Düzenle" class="btn btn-sm btn-success edit-request" data-id="@item.ID">
+                        <i class="bi bi-pen"></i>
+                    </button>
+                    <button title="Sil" class="btn btn-sm btn-danger delete-request" data-id="@item.ID">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                    <button title="Aksiyon ekle" class="btn btn-sm btn-primary" onclick="openAddActionModal(@item.ID)">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button title="Aksiyonları gör" class="btn btn-info btn-sm" onclick="showActionsModal(@item.ID)">
+                        <i class="bi bi-eye"></i>
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
-
 <!-- Sayfalama -->
 <nav>
     <ul class="pagination">
@@ -43,3 +48,8 @@
 <script>
     $("#row-" + id).remove(); // Silinen satırı DOM’dan kaldırır
 </script>
+
+
+
+
+
